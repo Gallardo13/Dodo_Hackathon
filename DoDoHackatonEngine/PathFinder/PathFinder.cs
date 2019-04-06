@@ -44,7 +44,7 @@ namespace PathFinder
                     hasBetterVariants |= Graph.GetAvailableDirections(point)
                         .Select(d => Update(point, d))
                         .ToList()
-                        .Any();
+                        .Any(b => b);
                 }
             }
             while (hasBetterVariants);
