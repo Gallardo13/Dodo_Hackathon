@@ -1,13 +1,54 @@
-﻿namespace Common
+﻿using System;
+
+namespace Common
 {
+    public class DirectionAngleAttribute : Attribute
+    {
+        public int Angle { get; set; }
+    }
+
     public enum Direction
     {
+        [DirectionAngle(Angle = 240)]
         NorthWest = 1,
+
+        [DirectionAngle(Angle = 180)]
         West = 2,
+
+        [DirectionAngle(Angle = 120)]
         SouthWest = 3,
+
+        [DirectionAngle(Angle = 60)]
         SouthEast = 4,
+
+        [DirectionAngle(Angle = 0)]
         East = 5,
+
+        [DirectionAngle(Angle = 300)]
         NorthEast = 6
+    }
+
+    public static class DirectionExtensions
+    {
+        public static int GetAngleBetweenDirections(this Direction from, Direction to)
+        {
+            var angleFrom = ((DirectionAngleAttribute[])from.GetType()
+                .GetCustomAttributes(typeof(DirectionAngleAttribute), false))[0].Angle;
+
+            var angleTo = ((DirectionAngleAttribute[])to.GetType()
+                .GetCustomAttributes(typeof(DirectionAngleAttribute), false))[0].Angle;
+
+            var minAngle = Math.Min(angleFrom, angleTo);
+            var maxAngle = Math.Min(angleFrom, angleTo);
+
+            var oneVal = minAngle - maxAngle;
+            var secVal = oneVal;
+
+            if (minAngle == 0)
+                secVal = 360 - maxAngle;
+
+            return Math.Min(oneVal, secVal);
+        }
     }
 
     public enum HexType
