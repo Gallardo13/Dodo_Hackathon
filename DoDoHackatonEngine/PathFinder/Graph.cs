@@ -7,7 +7,7 @@ namespace PathFinder
 {
     public class Graph
     {
-        public Dictionary<Point, GraphNode> Nodes = new Dictionary<Point, GraphNode>();
+        public Dictionary<Point, HexType> Nodes = new Dictionary<Point, HexType>();
         
         public void Init(int radius)
         {
@@ -21,11 +21,21 @@ namespace PathFinder
                     break;
                 }
                 
-                nodes.ForEach(n => Nodes.Add(n.Point, n));
+                nodes.ForEach(n => Nodes.Add(n.Hex, n.HexType));
             }
         }
 
-        private IEnumerable<GraphNode> GenerateCircle(int radius)
+        public IEnumerable<(Direction, Point)> GetAvailablePoints(Point current)
+        {
+            foreach (Direction dir in Enum.GetValues(typeof(Direction)))
+            {
+                var newPoint = current.AddDirection(dir);
+                if (Nodes.TryGetValue(newPoint, out var node) && node != HexType.Rock)
+                    yield return (dir, newPoint);
+            }
+        }
+
+        private IEnumerable<Visiblecell> GenerateCircle(int radius)
         {
             for (var x = -radius; x <= radius; x++)
                 for (var y = -radius; y <= radius; y++)
@@ -34,9 +44,9 @@ namespace PathFinder
                     var isOnEdge = Math.Abs(x) == radius || Math.Abs(y) == radius || Math.Abs(z) == radius;
                     if (isOnEdge && Math.Abs(z) <= radius)
                     {
-                        yield return new GraphNode()
+                        yield return new Visiblecell()
                         {
-                            Point = new Point(x, y, 0 - x - y),
+                            Hex = new Point(x, y, 0 - x - y),
                             HexType = HexType.Unknown,
                         };
                     }
