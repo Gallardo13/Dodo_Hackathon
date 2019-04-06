@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Common;
 
@@ -8,36 +9,31 @@ namespace PathFinder
     {
         private Dictionary<Point, PathVariant> currentVariants;
         
-        public Graph Graph = new Graph();
-
-        public Point Current { get; set; }
+        public readonly Graph Graph = new Graph();
         
         public Point Finish { get; private set; }
 
-        public void Init(Point start, Point finish, int radius)
+        public void Init(Point finish, int radius)
         {
             Graph.Init(radius);
-            Current = start;
             Finish = finish;
         }
 
         public void AddHexes(Visiblecell[] cells)
         {
-            foreach (var cell in cells.Where(c => c != null))
-            {
-                if (Graph.Nodes.ContainsKey(cell.Hex))
-                {
-                    Graph.Nodes[cell.Hex] = cell.HexType;
-                }
-            }
+            cells
+                .Where(c => c != null && Graph.Nodes.ContainsKey(c.Hex))
+                .ToList()
+                .ForEach(c => Graph.Nodes[c.Hex] = c.HexType);
         }
-        
-        public (Direction, int) WhereToGo(Direction currentDirection, int currentVelocity)
+
+        public (Direction, int) WhereToGo(Point currentLocation, Direction currentDirection, int currentVelocity)
         {
             bool hasBetterVariants;
+            
             currentVariants = new Dictionary<Point, PathVariant>()
             {
-                {Current, new PathVariant() }
+                { currentLocation, new PathVariant { Speed = currentVelocity, Direction = currentDirection, } }
             };
             
             do
@@ -45,32 +41,72 @@ namespace PathFinder
                 hasBetterVariants = false;
                 foreach (var point in currentVariants.Keys.ToList())
                 {
-                    foreach (var dirPoint in Graph.GetAvailablePoints(point))
-                    {
-                        hasBetterVariants = hasBetterVariants ||
-                                            Update(dirPoint.Item2, currentVariants[point], dirPoint.Item1);
-                    }
+                    hasBetterVariants |= Graph.GetAvailableDirections(point)
+                        .Select(d => Update(point, d))
+                        .ToList()
+                        .Any();
                 }
             }
             while (hasBetterVariants);
 
-            var bestDirection = currentVariants[Finish].Moves.First().Direction;
-            Current = Current.AddDirection(bestDirection);
-            return (bestDirection, currentVelocity == 0 ? 30 : 0);
+            var bestPath = currentVariants[Finish].Moves.First();
+            return (bestPath.Direction, bestPath.Acceleration);
         }
 
-        private bool Update(Point point, PathVariant path, Direction direction)
+        private bool Update(Point from, Direction direction)
         {
-            var thisTry = path.Copy();
-            thisTry.Moves.Add(new Move() { Direction = direction });
+            var currentVariant = currentVariants[from];
+            var thisTry = currentVariant.AddMove(direction, FindAcceleration(from, direction, currentVariant.Speed));
+            var targetPoint = from.AddDirection(direction);
             
-            if (!currentVariants.TryGetValue(point, out var existing) || thisTry.Cost() < existing.Cost())
+            if (!currentVariants.TryGetValue(targetPoint, out var existing) ||
+                existing.AggregateSpeed < thisTry.AggregateSpeed)
             {
-                currentVariants[point] = thisTry;
+                currentVariants[targetPoint] = thisTry;
                 return true;
             }
 
             return false;
+        }
+
+        private int FindAcceleration(Point from, Direction direction, int currentSpeed)
+        {
+            var next = from.AddDirection(direction);
+            var nextNext = next.AddDirection(direction);
+
+            Graph.Nodes.TryGetValue(next, out var nextType);
+            Graph.Nodes.TryGetValue(nextNext, out var nextNextType);
+            
+            var targetSpeed = 70;
+            
+            switch (nextType)
+            {
+                case HexType.Pit:
+                    targetSpeed = 70;
+                    break;
+                case HexType.DangerousArea:
+                    targetSpeed = 30;
+                    break;
+                default:
+                    switch (nextNextType)
+                    {
+                        case HexType.Pit:
+                            targetSpeed = 70;
+                            break;
+                        case HexType.DangerousArea:
+                            targetSpeed = 30;
+                            break;
+                    }
+
+                    break;
+            }
+
+            if (targetSpeed > currentSpeed)
+            {
+                return Math.Min(30, targetSpeed - currentSpeed);
+            }
+
+            return Math.Max(-30, targetSpeed - currentSpeed);
         }
     }
 }

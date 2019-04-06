@@ -25,13 +25,12 @@ namespace PathFinder
             }
         }
 
-        public IEnumerable<(Direction, Point)> GetAvailablePoints(Point current)
+        public IEnumerable<Direction> GetAvailableDirections(Point current)
         {
             foreach (Direction dir in Enum.GetValues(typeof(Direction)))
             {
-                var newPoint = current.AddDirection(dir);
-                if (Nodes.TryGetValue(newPoint, out var node) && node != HexType.Rock)
-                    yield return (dir, newPoint);
+                if (Nodes.TryGetValue(current.AddDirection(dir), out var node) && node != HexType.Rock)
+                    yield return dir;
             }
         }
 

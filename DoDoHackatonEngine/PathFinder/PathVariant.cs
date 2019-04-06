@@ -6,14 +6,24 @@ namespace PathFinder
 {
     public class PathVariant
     {
-        public int Cost() => Moves.Count();
+        public int AggregateSpeed { get; set; }
         
         public List<Move> Moves { get; } = new List<Move>();
 
-        public PathVariant Copy()
+        public int Speed { get; set; }
+
+        public Direction Direction { get; set; }
+
+        public PathVariant AddMove(Direction direction, int acceleration)
         {
             var result = new PathVariant();
             Moves.ForEach(result.Moves.Add);
+            Moves.Add(new Move() { Direction = direction, Acceleration = acceleration });
+            
+            result.AggregateSpeed += AggregateSpeed;
+            result.Speed += acceleration;
+            result.Direction = Direction;
+            
             return result;
         }
     }
@@ -21,6 +31,7 @@ namespace PathFinder
     public class Move
     {
         public Direction Direction { get; set; }
+        
         public int Acceleration { get; set; } = 0;
     }
 }

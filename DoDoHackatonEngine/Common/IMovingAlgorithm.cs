@@ -2,10 +2,10 @@
 {
     public interface IMovingAlgorithm
     {
-        void Init(Point start, Point finish, int radius);
+        void Init(Point finish, int radius);
         
         void AddHexes(Visiblecell[] cells);
 
-        (Direction, int) WhereToGo(Direction currentDirection, int currentVelocity);
+        (Direction, int) WhereToGo(Point currentLocation, Direction currentDirection, int currentVelocity);
     }
 }
