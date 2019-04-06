@@ -9,8 +9,10 @@ namespace DoDoHackatonEngine
     {
         static void Main(string[] args)
         {
-            var api = new Api();
-            api.BaseUrl = "http://51.15.100.12:5000";
+            var api = new Api
+            {
+                BaseUrl = "http://51.15.100.12:5000"
+            };
 
             Mathematical.Instance = api.GetMath();
 
