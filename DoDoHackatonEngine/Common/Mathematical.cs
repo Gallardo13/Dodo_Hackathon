@@ -41,12 +41,14 @@
 
     public struct LocationDelta
     {
-        Direction Direction { get; set; }
+        public Direction Direction { get; set; }
         public Delta Delta { get; set; }
     }
 
     public class Mathematical
     {
+        public static Mathematical Instance { get; set; }
+
         public int MaxSpeed { get; set; }
         public int MinSpeed { get; set; }
         public int MaxAcceleration { get; set; }

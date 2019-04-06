@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Common
 {
@@ -9,6 +10,13 @@ namespace Common
             X = x;
             Y = y;
             Z = z;
+        }
+
+        public static Point AddDirection(this Point point, Direction direction)
+        {
+            var delta = Mathematical.Instance.LocationDeltas.First(e => e.Direction == direction);
+
+            return new Point(point.X + delta.Delta.Dx, point.Y + delta.Delta.Dy, point.Z + delta.Delta.Dz);
         }
         
         public int X { get; set; }
