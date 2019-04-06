@@ -11,3 +11,10 @@
 /DoDoHackatonEngine/Common/bin/Release/netstandard2.0
 /DoDoHackatonEngine/DoDoHackatonEngine/bin/Release/netcoreapp2.1
 /DoDoHackatonEngine/.vs/config
+/DoDoHackatonEngine/GraphTest/bin
+/DoDoHackatonEngine/GraphTest/obj
+/DoDoHackatonEngine/PathFinder/bin
+/DoDoHackatonEngine/PathFinder/obj
+/DoDoHackatonEngine/GraphTest/.idea
+/DoDoHackatonEngine/PathFinder/.idea
+/DoDoHackatonEngine/.idea
