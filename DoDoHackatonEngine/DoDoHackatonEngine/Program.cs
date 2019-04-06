@@ -1,5 +1,7 @@
 ﻿using Common;
 using System;
+using System.Linq;
+using System.Threading;
 
 namespace DoDoHackatonEngine
 {
@@ -17,19 +19,30 @@ namespace DoDoHackatonEngine
             var algo = new PathFinder.PathFinder();
 
             var mapDescription = api.Play("test");
-            algo.AddHexes(GetVisiblecells(mapDescription.NeighbourCells));
+            algo.AddHexes(mapDescription.NeighbourCells));
 
-            for (int i = 0; i < 15; i++)
+            var currentDirection = mapDescription.CurrentDirection;
+            var currentSpeed = mapDescription.CurrentSpeed;
+
+            while (true)
             {
-                var result = api.Move(mapDescription.SessionId, Direction.East, 30);
-                Console.WriteLine(result.Status);
-                Console.ReadLine();
+                var (direction, acceleration) = algo.WhereToGo(currentDirection, currentSpeed);
+
+                var moveResult = api.Move(mapDescription.SessionId, direction, acceleration);
+                algo.AddHexes(moveResult.VisibleCells);
+                currentDirection = moveResult.Heading;
+                currentSpeed = moveResult.Speed;
+
+                Console.WriteLine(moveResult.Status);
+                Thread.Sleep(500);
+
+                if (
+                    moveResult.Status == TurnStatus.Punished
+                    || moveResult.Status == TurnStatus.HappyAsInsane
+                    || moveResult.Status == TurnStatus.Hungry)
+
+                    break;
             }
-        }
-
-        public static Visiblecell[] GetVisiblecells(Visiblecell[] visibleCells)
-        {
-
         }
     }
 }

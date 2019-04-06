@@ -2,6 +2,15 @@
 
 namespace Common
 {
+    public enum TurnStatus
+    {
+        NotBad = 1,
+        Drifted = 2,
+        Hungry = 3,
+        Punished = 4,
+        HappyAsInsane = 5
+    }
+
     public class TurnResult
     {
         public Command Command { get; set; }
@@ -9,8 +18,8 @@ namespace Common
         public Point Location { get; set; }
         public int ShortestWayLength { get; set; }
         public int Speed { get; set; }
-        public string Status { get; set; }
-        public string Heading { get; set; }
+        public TurnStatus Status { get; set; }
+        public Direction Heading { get; set; }
         public int FuelWaste { get; set; }
     }
 
