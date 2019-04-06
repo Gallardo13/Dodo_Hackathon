@@ -20,7 +20,7 @@ namespace DoDoHackatonEngine
 
             var algo = new PathFinder.PathFinder();
 
-            var mapDescription = api.Play("test");
+            var mapDescription = api.Play("spin");
 
             algo.Init(mapDescription.Finish, mapDescription.Radius);
             algo.AddHexes(mapDescription.NeighbourCells);

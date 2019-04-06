@@ -77,24 +77,21 @@ namespace PathFinder
             Graph.Nodes.TryGetValue(next, out var nextType);
             Graph.Nodes.TryGetValue(nextNext, out var nextNextType);
             
-            var targetSpeed = 70;
+            var targetSpeed = 90;
             
             switch (nextType)
             {
-                case HexType.Pit:
-                    targetSpeed = 70;
+                case HexType.Pit when currentSpeed < 70:
+                    targetSpeed = 90;
                     break;
-                case HexType.DangerousArea:
+                case HexType.DangerousArea when currentSpeed > 30:
                     targetSpeed = 30;
                     break;
                 default:
                     switch (nextNextType)
                     {
-                        case HexType.Pit:
-                            targetSpeed = 70;
-                            break;
                         case HexType.DangerousArea:
-                            targetSpeed = 30;
+                            targetSpeed = 60;
                             break;
                     }
 
