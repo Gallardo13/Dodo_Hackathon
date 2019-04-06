@@ -22,20 +22,22 @@ namespace DoDoHackatonEngine
 
             var mapDescription = api.Play("test");
 
-            algo.Init(mapDescription.CurrentLocation, mapDescription.Finish, mapDescription.Radius);
+            algo.Init(mapDescription.Finish, mapDescription.Radius);
             algo.AddHexes(mapDescription.NeighbourCells);
 
             var currentDirection = mapDescription.CurrentDirection;
             var currentSpeed = mapDescription.CurrentSpeed;
+            var currentLocation = mapDescription.CurrentLocation;
 
             while (true)
             {
-                var (direction, acceleration) = algo.WhereToGo(currentDirection, currentSpeed);
+                var (direction, acceleration) = algo.WhereToGo(currentLocation, currentDirection, currentSpeed);
 
                 var moveResult = api.Move(mapDescription.SessionId, direction, acceleration);
                 algo.AddHexes(moveResult.VisibleCells);
                 currentDirection = moveResult.Heading;
                 currentSpeed = moveResult.Speed;
+                currentLocation = moveResult.Location;
 
                 Console.WriteLine($"{moveResult.Location.X} {moveResult.Location.Y} {moveResult.Location.Z} " +
                     $"{moveResult.VisibleCells.First(e=>e.Hex.X == moveResult.Location.X && e.Hex.Y == moveResult.Location.Y && e.Hex.Z == moveResult.Location.Z).HexType}");
