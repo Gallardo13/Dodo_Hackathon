@@ -16,8 +16,10 @@ namespace DoDoHackatonEngine
 
         private string Post(string requestUri, string content)
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(BaseUrl);
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri(BaseUrl)
+            };
             client.DefaultRequestHeaders
                 .Accept
                 .Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
@@ -33,8 +35,10 @@ namespace DoDoHackatonEngine
 
         private string Put(string requestUri, string content)
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(BaseUrl);
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri(BaseUrl)
+            };
             client.DefaultRequestHeaders
                 .Accept
                 .Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
@@ -50,8 +54,10 @@ namespace DoDoHackatonEngine
 
         private string Get(string requestUri)
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(BaseUrl);
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri(BaseUrl)
+            };
             client.DefaultRequestHeaders
                 .Accept
                 .Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
