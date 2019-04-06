@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Common
 {
-    public struct Point : IEquatable<Point>
+    public class Point : IEquatable<Point>
     {
         public Point(int x, int y, int z)
         {
@@ -12,20 +12,16 @@ namespace Common
             Z = z;
         }
 
-        public static Point AddDirection(this Point point, Direction direction)
+        public Point AddDirection(Direction direction)
         {
             var delta = Mathematical.Instance.LocationDeltas.First(e => e.Direction == direction);
 
-            return new Point(point.X + delta.Delta.Dx, point.Y + delta.Delta.Dy, point.Z + delta.Delta.Dz);
+            return new Point(X + delta.Delta.Dx, Y + delta.Delta.Dy, Z + delta.Delta.Dz);
         }
         
         public int X { get; }
         public int Y { get; }
         public int Z { get; }
-
-        public Point AddDirection(Direction direction)
-        {
-        }
 
         public bool Equals(Point other)
         {

@@ -20,13 +20,18 @@ namespace PathFinder
             Current = start;
             Finish = finish;
         }
-        
-        public void AddHexes(HexType[] hexes)
-        {
-            
-            
-        }
 
+        public void AddHexes(Visiblecell[] cells)
+        {
+            foreach (var cell in cells.Where(c => c != null))
+            {
+                if (Graph.Nodes.ContainsKey(cell.Hex))
+                {
+                    Graph.Nodes[cell.Hex] = cell.HexType;
+                }
+            }
+        }
+        
         public (Direction, int) WhereToGo(Direction currentDirection, int currentVelocity)
         {
             bool hasBetterVariants;
