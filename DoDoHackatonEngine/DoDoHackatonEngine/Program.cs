@@ -9,8 +9,10 @@ namespace DoDoHackatonEngine
     {
         static void Main(string[] args)
         {
-            var api = new Api();
-            api.BaseUrl = "http://51.15.100.12:5000";
+            var api = new Api
+            {
+                BaseUrl = "http://51.15.100.12:5000"
+            };
 
             Mathematical.Instance = api.GetMath();
 
@@ -19,7 +21,9 @@ namespace DoDoHackatonEngine
             var algo = new PathFinder.PathFinder();
 
             var mapDescription = api.Play("test");
-            algo.AddHexes(mapDescription.NeighbourCells));
+
+            algo.Init(mapDescription.CurrentLocation, mapDescription.Finish, mapDescription.Radius);
+            algo.AddHexes(mapDescription.NeighbourCells);
 
             var currentDirection = mapDescription.CurrentDirection;
             var currentSpeed = mapDescription.CurrentSpeed;
@@ -33,8 +37,10 @@ namespace DoDoHackatonEngine
                 currentDirection = moveResult.Heading;
                 currentSpeed = moveResult.Speed;
 
+                Console.WriteLine($"{moveResult.Location.X} {moveResult.Location.Y} {moveResult.Location.Z} " +
+                    $"{moveResult.VisibleCells.First(e=>e.Hex.X == moveResult.Location.X && e.Hex.Y == moveResult.Location.Y && e.Hex.Z == moveResult.Location.Z).HexType}");
                 Console.WriteLine(moveResult.Status);
-                Thread.Sleep(500);
+                Thread.Sleep(300);
 
                 if (
                     moveResult.Status == TurnStatus.Punished
@@ -43,6 +49,8 @@ namespace DoDoHackatonEngine
 
                     break;
             }
+
+            Console.ReadLine();
         }
     }
 }
