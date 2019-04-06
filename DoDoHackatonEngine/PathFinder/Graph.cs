@@ -5,11 +5,11 @@ using Common;
 
 namespace PathFinder
 {
-    public class Graph
+    public static class Graph
     {
-        public Dictionary<Point, HexType> Nodes = new Dictionary<Point, HexType>();
+        public static Dictionary<Point, HexType> Nodes = new Dictionary<Point, HexType>();
         
-        public void Init(int radius)
+        public static void Init(int radius)
         {
             var countOfNodesInMaxRadius = (radius - 2) * 6 + 6;
             
@@ -25,7 +25,7 @@ namespace PathFinder
             }
         }
 
-        public IEnumerable<Direction> GetAvailableDirections(Point current)
+        public static IEnumerable<Direction> GetAvailableDirections(Point current)
         {
             foreach (Direction dir in Enum.GetValues(typeof(Direction)))
             {
@@ -34,7 +34,7 @@ namespace PathFinder
             }
         }
 
-        private IEnumerable<Visiblecell> GenerateCircle(int radius)
+        private static IEnumerable<Visiblecell> GenerateCircle(int radius)
         {
             for (var x = -radius; x <= radius; x++)
                 for (var y = -radius; y <= radius; y++)
