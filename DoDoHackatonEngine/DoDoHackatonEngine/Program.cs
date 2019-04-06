@@ -30,6 +30,7 @@ namespace DoDoHackatonEngine
             var currentSpeed = mapDescription.CurrentSpeed;
             var currentLocation = mapDescription.CurrentLocation;
 
+            var turnCount = 0;
             while (true)
             {
                 var (direction, acceleration) = algo.WhereToGo(currentLocation, currentDirection, currentSpeed);
@@ -43,9 +44,15 @@ namespace DoDoHackatonEngine
                 currentSpeed = moveResult.Speed;
                 currentLocation = moveResult.Location;
 
-                Console.WriteLine($"{moveResult.Location.X} {moveResult.Location.Y} {moveResult.Location.Z} " +
-                    $"{moveResult.VisibleCells.First(e=>e.Hex.X == moveResult.Location.X && e.Hex.Y == moveResult.Location.Y && e.Hex.Z == moveResult.Location.Z).HexType}");
-                Console.WriteLine(moveResult.Status);
+                Console.Write($"Position: {moveResult.Location.X} {moveResult.Location.Y} {moveResult.Location.Z}, " +
+                    $"Velocity: {moveResult.Speed}, Status: {moveResult.Status}, ");
+
+                if (moveResult.VisibleCells.Count() > 0)
+                    Console.Write($"Hex type: {moveResult.VisibleCells.First(e=>e.Hex.X == moveResult.Location.X && e.Hex.Y == moveResult.Location.Y && e.Hex.Z == moveResult.Location.Z).HexType}");
+
+                Console.WriteLine();
+
+                turnCount++;
 
                 if (
                     moveResult.Status == TurnStatus.Punished
@@ -55,6 +62,7 @@ namespace DoDoHackatonEngine
                     break;
             }
 
+            Console.WriteLine($"Total turns: {turnCount}");
             Console.ReadLine();
         }
     }
