@@ -25,6 +25,16 @@ namespace PathFinder
             }
         }
 
+        public IEnumerable<(Direction, Point)> GetAvailablePoints(Point current)
+        {
+            foreach (Direction dir in Enum.GetValues(typeof(Direction)))
+            {
+                var newPoint = current.AddDirection(dir);
+                if (Nodes.TryGetValue(newPoint, out var node) && node.HexType != HexType.Rock)
+                    yield return (dir, newPoint);
+            }
+        }
+
         private IEnumerable<GraphNode> GenerateCircle(int radius)
         {
             for (var x = -radius; x <= radius; x++)

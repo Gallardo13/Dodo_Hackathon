@@ -1,9 +1,13 @@
-﻿using Common;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Common;
 
 namespace PathFinder
 {
     public class PathFinder : IMovingAlgorithm
     {
+        private Dictionary<Point, PathVariant> currentVariants;
+        
         public Graph Graph = new Graph();
 
         public Point Current { get; set; }
@@ -20,9 +24,48 @@ namespace PathFinder
         public void AddHexes(HexType[] hexes)
         {
             
+            
         }
-        
-        
-        public (Direction, int) WhereToGo(Direction currentDirection, int currentVelocity) { throw new System.NotImplementedException(); }
+
+        public (Direction, int) WhereToGo(Direction currentDirection, int currentVelocity)
+        {
+            bool hasBetterVariants;
+            currentVariants = new Dictionary<Point, PathVariant>()
+            {
+                {Current, new PathVariant() }
+            };
+            
+            do
+            {
+                hasBetterVariants = false;
+                foreach (var point in currentVariants.Keys.ToList())
+                {
+                    foreach (var dirPoint in Graph.GetAvailablePoints(point))
+                    {
+                        hasBetterVariants = hasBetterVariants ||
+                                            Update(dirPoint.Item2, currentVariants[point], dirPoint.Item1);
+                    }
+                }
+            }
+            while (hasBetterVariants);
+
+            var bestDirection = currentVariants[Finish].Moves.First().Direction;
+            Current = Current.AddDirection(bestDirection);
+            return (bestDirection, currentVelocity == 0 ? 30 : 0);
+        }
+
+        private bool Update(Point point, PathVariant path, Direction direction)
+        {
+            var thisTry = path.Copy();
+            thisTry.Moves.Add(new Move() { Direction = direction });
+            
+            if (!currentVariants.TryGetValue(point, out var existing) || thisTry.Cost() < existing.Cost())
+            {
+                currentVariants[point] = thisTry;
+                return true;
+            }
+
+            return false;
+        }
     }
 }

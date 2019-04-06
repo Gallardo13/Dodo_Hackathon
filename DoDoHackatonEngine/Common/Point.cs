@@ -2,7 +2,7 @@
 
 namespace Common
 {
-    public class Point : IEquatable<Point>
+    public struct Point : IEquatable<Point>
     {
         public Point(int x, int y, int z)
         {
@@ -11,9 +11,13 @@ namespace Common
             Z = z;
         }
         
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Z { get; set; }
+        public int X { get; }
+        public int Y { get; }
+        public int Z { get; }
+
+        public Point AddDirection(Direction direction)
+        {
+        }
 
         public bool Equals(Point other)
         {
