@@ -10,9 +10,14 @@ namespace DoDoHackatonEngine
             var api = new Api();
             api.BaseUrl = "http://51.15.100.12:5000";
 
+            Mathematical.Instance = api.GetMath();
+
             api.Login("SberWild", "LqA7xP");
 
+            var algo = new PathFinder.PathFinder();
+
             var mapDescription = api.Play("test");
+            algo.AddHexes(GetVisiblecells(mapDescription.NeighbourCells));
 
             for (int i = 0; i < 15; i++)
             {
@@ -20,6 +25,11 @@ namespace DoDoHackatonEngine
                 Console.WriteLine(result.Status);
                 Console.ReadLine();
             }
+        }
+
+        public static Visiblecell[] GetVisiblecells(Visiblecell[] visibleCells)
+        {
+
         }
     }
 }

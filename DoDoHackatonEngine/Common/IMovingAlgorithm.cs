@@ -4,7 +4,7 @@
     {
         void Init(Point start, Point finish, int radius);
         
-        void AddHexes(HexType[] hexes);
+        void AddHexes(Visiblecell[] hexes);
 
         (Direction, int) WhereToGo(Direction currentDirection, int currentVelocity);
     }
