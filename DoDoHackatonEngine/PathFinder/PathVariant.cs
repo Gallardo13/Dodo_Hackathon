@@ -18,7 +18,7 @@ namespace PathFinder
         {
             var result = new PathVariant();
             Moves.ForEach(result.Moves.Add);
-            Moves.Add(new Move() { Direction = direction, Acceleration = acceleration });
+            result.Moves.Add(new Move() { Direction = direction, Acceleration = acceleration });
             
             result.AggregateSpeed += AggregateSpeed;
             result.Speed += acceleration;
