@@ -56,6 +56,10 @@ namespace DoDoHackatonEngine
                 .Accept
                 .Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
 
+            if (!string.IsNullOrEmpty(Token))
+                client.DefaultRequestHeaders
+                    .Add("Authorization", $"Bearer {Token}");
+
             return client.GetAsync(requestUri).Result.Content.ReadAsStringAsync().Result;
         }
 
@@ -88,6 +92,12 @@ namespace DoDoHackatonEngine
 
             return JsonConvert.DeserializeObject<TurnResult>(json);
         }
+
+        public void RefreshMap(string sessionId)
+        {
+            Get($"/raceapi/race?sessionId={sessionId}");
+        }
+
         //public 
     }
 }

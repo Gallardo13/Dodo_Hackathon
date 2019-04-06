@@ -11,7 +11,8 @@ namespace DoDoHackatonEngine
         {
             var api = new Api
             {
-                BaseUrl = "http://51.15.100.12:5000"
+                BaseUrl = "http://127.0.0.1:5000"
+                //BaseUrl = "http://51.15.100.12:5000"
             };
 
             Mathematical.Instance = api.GetMath();
@@ -20,7 +21,7 @@ namespace DoDoHackatonEngine
 
             var algo = new PathFinder.PathFinder();
 
-            var mapDescription = api.Play("spin");
+            var mapDescription = api.Play("maze");
 
             algo.Init(mapDescription.Finish, mapDescription.Radius);
             algo.AddHexes(mapDescription.NeighbourCells);
@@ -34,6 +35,9 @@ namespace DoDoHackatonEngine
                 var (direction, acceleration) = algo.WhereToGo(currentLocation, currentDirection, currentSpeed);
 
                 var moveResult = api.Move(mapDescription.SessionId, direction, acceleration);
+
+                api.RefreshMap(mapDescription.SessionId);
+
                 algo.AddHexes(moveResult.VisibleCells);
                 currentDirection = moveResult.Heading;
                 currentSpeed = moveResult.Speed;
@@ -42,7 +46,7 @@ namespace DoDoHackatonEngine
                 Console.WriteLine($"{moveResult.Location.X} {moveResult.Location.Y} {moveResult.Location.Z} " +
                     $"{moveResult.VisibleCells.First(e=>e.Hex.X == moveResult.Location.X && e.Hex.Y == moveResult.Location.Y && e.Hex.Z == moveResult.Location.Z).HexType}");
                 Console.WriteLine(moveResult.Status);
-                Thread.Sleep(300);
+                //Thread.Sleep(1000);
 
                 if (
                     moveResult.Status == TurnStatus.Punished
