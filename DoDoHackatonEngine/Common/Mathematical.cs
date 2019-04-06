@@ -51,6 +51,46 @@ namespace Common
         }
     }
 
+    public static class PointResulter
+    {
+        public static PointResult GetPointResult(
+            Point targetPoint,
+            Point accelerationPoint,
+            Direction currentDirection,
+            Direction targetDirection,
+            int currentSpeed,
+            int acceleration
+        ) {
+            PointResult result = new PointResult();
+            int speed = currentSpeed + acceleration > 100 ? 100 : currentSpeed + acceleration;
+
+            switch (currentDirection.GetAngleBetweenDirections(targetDirection)) {
+                case 180 when speed > 30:
+                    result.Speed = speed - 90;
+                    result.Point = accelerationPoint;
+                    result.Direction = targetDirection;
+                    break;
+                case 120 when speed > 60:
+                    result.Speed = speed;
+                    result.Point = targetPoint;
+                    result.Direction = targetDirection;
+                    break;
+                case 60 when speed > 90:
+                    result.Speed = speed;
+                    result.Point = targetPoint;
+                    result.Direction = targetDirection;
+                    break;
+                default:
+                    result.Speed = speed;
+                    result.Point = targetPoint;
+                    result.Direction = targetDirection;
+                    break;
+            }
+
+            return result;
+        }
+    }
+
     public enum HexType
     {
         Unknown = 0,
@@ -58,6 +98,12 @@ namespace Common
         Rock = 2,
         DangerousArea = 3,
         Pit = 4
+    }
+
+    public struct PointResult {
+        public Point Point { get; set; }
+        public int Speed { get; set; }
+        public Direction Direction { get; set; }
     }
 
     public struct DriftAngle
