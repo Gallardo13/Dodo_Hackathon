@@ -61,6 +61,6 @@
 
         public Angle[] Angles { get; set; }
 
-        public LocationDelta LocationDeltas { get; set; }
+        public LocationDelta[] LocationDeltas { get; set; }
     }
 }
