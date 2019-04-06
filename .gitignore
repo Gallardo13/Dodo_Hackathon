@@ -5,11 +5,15 @@
 /.vs
 /DoDoHackatonEngine/.vs/DoDoHackatonEngine
 /DoDoHackatonEngine/Common/bin/Debug/netstandard2.1
+/DoDoHackatonEngine/Common/bin/Debug/netstandard2.0
 /DoDoHackatonEngine/Common/obj
 /DoDoHackatonEngine/DoDoHackatonEngine/bin/Debug/netcoreapp2.1
+/DoDoHackatonEngine/DoDoHackatonEngine/bin/Debug/netcoreapp2.0
 /DoDoHackatonEngine/DoDoHackatonEngine/obj
 /DoDoHackatonEngine/Common/bin/Release/netstandard2.1
+/DoDoHackatonEngine/Common/bin/Release/netstandard2.0
 /DoDoHackatonEngine/DoDoHackatonEngine/bin/Release/netcoreapp2.1
+/DoDoHackatonEngine/DoDoHackatonEngine/bin/Release/netcoreapp2.0
 /DoDoHackatonEngine/.vs/config
 /DoDoHackatonEngine/GraphTest/bin
 /DoDoHackatonEngine/GraphTest/obj
