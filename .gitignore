@@ -1,0 +1,12 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/DoDoHackatonEngine/.vs/DoDoHackatonEngine
+/DoDoHackatonEngine/Common/bin/Debug/netstandard2.0
+/DoDoHackatonEngine/Common/obj
+/DoDoHackatonEngine/DoDoHackatonEngine/bin/Debug/netcoreapp2.1
+/DoDoHackatonEngine/DoDoHackatonEngine/obj
+/DoDoHackatonEngine/Common/bin/Release/netstandard2.0
+/DoDoHackatonEngine/DoDoHackatonEngine/bin/Release/netcoreapp2.1
